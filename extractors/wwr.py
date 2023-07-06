@@ -28,16 +28,16 @@ def extract_wwwr_jobs(keyword):
                 anchor = anchors[1]
                 link = anchor['href']
                 # list의 크기를 알고 있을 때, 변수 선언하는 방법
-                company, kind, region = anchor.find_all('span', class_="company")
+                company, kind, location = anchor.find_all('span', class_="company")
                 # find_all : 모두 찾기
                 # find : 하나만 찾기
                 title = anchor.find('span', class_='title')
                 # 문자만 추출해서 dictionary에 저장
                 job_data = {
                     'link' : f"https://weworkremotely.com/{link}",
-                    'company': company.string,
-                    'region': region.string,
-                    'position': title.string
+                    'company': company.string.replace(","," "),
+                    'location': location.string.replace(","," "),
+                    'position': title.string.replace(","," ")
                 }
 
                 results.append(job_data)
