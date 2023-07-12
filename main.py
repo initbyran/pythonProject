@@ -15,10 +15,33 @@
 #     file.write(f"{job['position']},{job['company']},{job['location']},{job['link']}\n")
 #
 # file.close()
+
+
+# 네이버
+from extractors.naverTravel import extractors_naver_travel
 import json
 
-# # 네이버
-# from extractors.naverapitest import extractors_naver_cooking
+info = extractors_naver_travel()
+
+results = []
+
+print("processing data to json")
+
+# json 형태 저장하는걸 바꾸려면 여기수정
+for contents in info:
+    results.append({
+        'document' : f"{contents['title']} : {contents['content']}"
+    })
+
+# json 저장
+with open('news1post-travel.json', 'w', encoding='utf-8') as f:
+    json.dump(results, f, ensure_ascii=False, indent="\t")
+
+print(len(results))
+
+
+# # 그랑라루스 요리백과
+# from extractors.naverCooking import extractors_naver_cooking
 # import json
 #
 # cooking_info = extractors_naver_cooking()
@@ -34,20 +57,10 @@ import json
 #     })
 #
 # # json 저장
-# with open('naver-food.json', 'w', encoding='utf-8') as f:
+# with open('larousse-food.json', 'w', encoding='utf-8') as f:
 #     json.dump(results, f, ensure_ascii=False, indent="\t")
+#
+# print(len(results))
 
-from extractors.brunch import extractors_brunch
-
-brunch_cooking = extractors_brunch("푸주")
-
-results = []
-
-for contents in brunch_cooking:
-    results.append({
-        'document' : f"{contents['title']} : {contents['content']}"
-    })
-with open('brunch-food.json', 'w', encoding='utf-8') as f:
-    json.dump(results, f, ensure_ascii=False, indent="\t")
 
 

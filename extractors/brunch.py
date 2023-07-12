@@ -18,16 +18,16 @@ def extractors_brunch(keyword):
     response = requests.get(f'{base_url}{keyword}')
     soup = BeautifulSoup(response.text, 'html.parser')
 
-    SCROLL_PAUSE_TIME = 4
+    SCROLL_PAUSE_TIME = 6
 
     last_height = driver.execute_script("return document.body.scrollHeight")
     cnt = 0
     cooking = []
     start_page = 0
 
-    while cnt < 3:
-        cnt += 1
-        print(cnt)
+    while True:
+        # cnt += 1
+        print("is it working?")
         driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
         time.sleep(SCROLL_PAUSE_TIME)
         new_height = driver.execute_script("return document.body.scrollHeight")
@@ -57,14 +57,17 @@ def extractors_brunch(keyword):
             driver.get_window_position(driver.window_handles[1])
             driver.implicitly_wait(2)
 
+            html = driver.page_source
+            soup = BeautifulSoup(html,'html.parser')
+
             for entry in soup.select('.wrap_article_list > ul > li'):
                 link = 'https://brunch.co.kr' + entry.select_one('a')['href']
 
-                entry_response = requests.get(link)
+                # entry_response = requests.get(link)
                 print(link)
-                entry_soup = BeautifulSoup(entry_response.text, 'html.parser')
-                title = entry_soup.select_one('h1#cover_title').text.strip() if entry_soup.select_one('h1#cover_title') is not None else "Unknown"
-                content = entry_soup.select_one('p#wrap_item item_type_text').text.strip() if entry_soup.select_one('p#wrap_item item_type_text') is not None else "Unknown"
+                # entry_soup = BeautifulSoup(entry_response.text, 'html.parser')
+                title = soup.select_one('h1#cover_title').text.strip() if soup.select_one('h1#cover_title') is not None else "Unknown"
+                content = soup.select_one('p.wrap_item.item_type_text') if soup.select_one('p#wrap_item item_type_text') is not None else "Unknown"
 
             time.sleep(SCROLL_PAUSE_TIME)
 
